@@ -9,14 +9,13 @@ import (
 )
 
 func eat(p *philos.Philosopher) {
-	p.Args.PrintLock.Lock()
 	p.Args.DeathLock.Lock()
 	if p.Args.DeathStatus == true {
-		p.Args.PrintLock.Unlock()
 		p.Args.DeathLock.Unlock()
 		return
 	}
 	p.Args.DeathLock.Unlock()
+	p.Args.PrintLock.Lock()
 	current := time.Now()
 	change := current.Sub(p.Args.StartTime)
 	fmt.Printf("\033[33m%d %d is eating\033[0m\n", change.Milliseconds(), p.ID+1)
@@ -25,14 +24,13 @@ func eat(p *philos.Philosopher) {
 }
 
 func sleep(p *philos.Philosopher) {
-	p.Args.PrintLock.Lock()
 	p.Args.DeathLock.Lock()
 	if p.Args.DeathStatus == true {
-		p.Args.PrintLock.Unlock()
 		p.Args.DeathLock.Unlock()
 		return
 	}
 	p.Args.DeathLock.Unlock()
+	p.Args.PrintLock.Lock()
 	current := time.Now()
 	change := current.Sub(p.Args.StartTime)
 	fmt.Printf("\033[33m%d %d is sleeping\033[0m\n", change.Milliseconds(), p.ID+1)
@@ -41,14 +39,13 @@ func sleep(p *philos.Philosopher) {
 }
 
 func think(p *philos.Philosopher) {
-	p.Args.PrintLock.Lock()
 	p.Args.DeathLock.Lock()
 	if p.Args.DeathStatus == true {
-		p.Args.PrintLock.Unlock()
 		p.Args.DeathLock.Unlock()
 		return
 	}
 	p.Args.DeathLock.Unlock()
+	p.Args.PrintLock.Lock()
 	current := time.Now()
 	change := current.Sub(p.Args.StartTime)
 	fmt.Printf("\033[33m%d %d is thinking\033[0m\n", change.Milliseconds(), p.ID+1)
@@ -56,14 +53,13 @@ func think(p *philos.Philosopher) {
 }
 
 func forkTaken(p *philos.Philosopher) {
-	p.Args.PrintLock.Lock()
 	p.Args.DeathLock.Lock()
 	if p.Args.DeathStatus == true {
-		p.Args.PrintLock.Unlock()
 		p.Args.DeathLock.Unlock()
 		return
 	}
 	p.Args.DeathLock.Unlock()
+	p.Args.PrintLock.Lock()
 	current := time.Now()
 	change := current.Sub(p.Args.StartTime)
 	fmt.Printf("\033[33m%d %d has taken a fork\033[0m\n", change.Milliseconds(), p.ID+1)
@@ -125,12 +121,12 @@ func philosAtWork(p *philos.Philosopher) {
 		p.Args.PrintLock.Unlock()
 		return
 	}
-	// if p.ID%2 == 1 {
-	// 	time.Sleep(7 * time.Millisecond)
-	// }
-	if p.ID%2 == 1 && p.ID != p.Args.TotPhilos-1 {
-		time.Sleep(5 * time.Millisecond)
+	if p.ID%2 == 1 {
+		time.Sleep(7 * time.Millisecond)
 	}
+	// if p.Args.TotPhilos%2 == 1 && p.ID+1 == p.Args.TotPhilos {
+	// 	time.Sleep(5 * time.Millisecond)
+	// }
 	for {
 		if eatSleepRepeat(p) == false {
 			return
